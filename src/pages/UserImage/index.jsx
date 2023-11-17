@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import { View, Text, Image, TouchableOpacity} from 'react-native';
 import styles from './styles';
 import * as Animatable from 'react-native-animatable';
 import * as ImagePicker from 'expo-image-picker';
