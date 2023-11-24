@@ -1,6 +1,7 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
-
+import { Provider } from 'react-redux';
+import { Store } from './src/reducers/store';
 import { NavigationContainer } from '@react-navigation/native';
 import Routes from './src/routes';
 import { useFonts } from 'expo-font';
@@ -26,9 +27,12 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <StatusBar backgroundColor="#FF007F" barStyle="light-content"/>
-      <Routes/>
-    </NavigationContainer>
+    <Provider store={Store}>
+      <NavigationContainer>
+        <StatusBar backgroundColor="#FF007F" barStyle="light-content" />
+        <Routes />
+      </NavigationContainer>
+    </Provider>
+
   );
 }

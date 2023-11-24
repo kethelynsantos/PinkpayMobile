@@ -1,88 +1,115 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 
-import * as Animatable from 'react-native-animatable'
+import styles from './styles';
 
+import * as Animatable from 'react-native-animatable';
+import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux';
+import { setToken } from '../../reducers/actions';
+import axiosInstance from '../../sevices/axiosInstance';
 
 export default function Welcome() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const [cpf, setCPF] = useState('');
+  const [password, setPassword] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+
+  const { token } = useSelector((state) => {
+    return state.userReducer;
+  });
+
+  const createUser = async () => {
+    try {
+      const response = await axiosInstance.post(
+        'customuser/register/',
+        {
+          cpf: cpf,
+          password: password,
+        },
+        {
+          headers: {
+            'Authorization': 'Token fd478484c6a5192225e424c463b114ffe5143a30',
+          },
+        }
+      );
+
+      console.log('Usuário criado com sucesso:', response.data);
+
+      navigation.navigate('Register');
+      loginUser();
+
+    } catch (error) {
+      console.error('Erro ao criar usuário:', error.response.data);
+    }
+  };
+
+  const loginUser = async () => {
+    try {
+      const login = await axiosInstance.post(
+        'auth/token/login/',
+        {
+          cpf: cpf,
+          password: password,
+        },
+        {
+          headers: {
+            'Authorization': `Token fd478484c6a5192225e424c463b114ffe5143a30`,
+          },
+        }
+      );
+      
+      dispatch(setToken(login.data.auth_token));
+
+    } catch (error) {
+      console.error('Erro ao fazer login:', error.response.data);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.containerLogo}>
-        <Animatable.Image
-          animation="flipInY"
-          source={require('../../assets/logo.png')}
-          style={{ width: '100%' }}
-          resizeMode='contain'
-        />
-      </View>
-
-      <Animatable.View delay={600} animation="fadeInUp" style={styles.containerForm}>
-        <Text style={styles.title}>Monitore, organize seus gastos de qualquer lugar!</Text>
-        <Text style={styles.text}>Faça login para começar</Text>
-
-        <TouchableOpacity 
-        style={styles.button}
-        onPress={ () => navigation.navigate('SignIn')}
-        >
-          <Text style={styles.buttonText}>Acessar</Text>
-        </TouchableOpacity>
+      <Animatable.View animation="fadeInLeft" delay={500} style={styles.containerHeader}>
+        <Text style={styles.message}>Bem-vindo (a)</Text>
       </Animatable.View>
 
+      <Animatable.View animation="fadeInUp" style={styles.containerForm}>
+        <Text style={styles.title}>CPF</Text>
+        <TextInput
+          placeholder="Digite seu CPF"
+          style={styles.input}
+          value={cpf}
+          onChangeText={(text) => setCPF(text)}
+        />
+
+        <Text style={styles.title}>Senha</Text>
+        <View style={styles.passwordInputContainer}>
+          <View style={styles.passwordInput}>
+            <TextInput
+              placeholder="Crie uma senha"
+              secureTextEntry={!isPasswordVisible}
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+            />
+          </View>
+          <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIconContainer}>
+            <Feather name={isPasswordVisible ? 'eye' : 'eye-off'} size={20} color="black" />
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={createUser}
+        >
+          <Text style={styles.buttonText}>Continuar</Text>
+        </TouchableOpacity>
+      </Animatable.View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#38a69d',
-  },
-
-  containerLogo: {
-    flex: 2,
-    backgroundColor: '38a69d',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-
-  containerForm: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    paddingStart: '5%',
-    paddingEnd: '5%'
-  },
-
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginTop: 28,
-    marginBottom: 12,
-  },
-
-  text: {
-    color: '#a1a1a1'
-  },
-
-  button: {
-    position: 'absolute',
-    backgroundColor: '#38a69d',
-    borderRadius: 50,
-    paddingVertical: 8,
-    width: '60%',
-    alignSelf: 'center',
-    bottom: '15%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  buttonText: {
-    fontSize: 18,
-    color: '#FFF',
-    fontWeight: 'bold'
-  },
-});

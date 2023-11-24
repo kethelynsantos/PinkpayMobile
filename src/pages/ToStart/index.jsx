@@ -18,7 +18,7 @@ export default function ToStart() {
 
                     <TouchableOpacity 
                         style={styles.button}
-                        onPress={ () => navigation.navigate('Register')}
+                        onPress={ () => navigation.navigate('Welcome')}
                     >
                         <Text style={styles.buttonText}>Começar</Text>
                     </TouchableOpacity>

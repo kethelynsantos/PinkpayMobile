@@ -6,13 +6,14 @@ import SignIn from "../pages/SignIn";
 import Register from "../pages/Register";
 import Address from "../pages/Address";
 import UserImage from "../pages/UserImage";
+import Welcome from "../pages/Welcome";
 
 const Stack = createNativeStackNavigator();
 
 export default function Routes() {
     return (
         <Stack.Navigator>
-           <Stack.Screen
+            <Stack.Screen
                 name="First"
                 component={First}
                 options={{ headerShown: false }}
@@ -45,6 +46,12 @@ export default function Routes() {
             <Stack.Screen
                 name="UserImage"
                 component={UserImage}
+                options={{ headerShown: false }}
+            />
+
+            <Stack.Screen
+                name="Welcome"
+                component={Welcome}
                 options={{ headerShown: false }}
             />
 
