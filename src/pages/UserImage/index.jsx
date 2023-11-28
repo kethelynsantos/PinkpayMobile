@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity} from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import * as Animatable from 'react-native-animatable';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
-
+import { useSelector } from 'react-redux';
+import axiosInstance from '../../sevices/axiosInstance';
 
 export default function UserImage() {
   const navigation = useNavigation();
-
+  const { token, clientId } = useSelector((state) => state.userReducer);
   const [image, setImage] = useState("https://static.vecteezy.com/system/resources/previews/008/302/463/non_2x/eps10-pink-user-icon-or-logo-in-simple-flat-trendy-modern-style-isolated-on-white-background-free-vector.jpg");
 
   const handleImagePicker = async () => {
@@ -25,19 +26,41 @@ export default function UserImage() {
   };
 
   const webcam = async () => {
-    const result = ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-    })
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-    console.log((await result).assets[0].uri)
-
-    if (!(await result).canceled) {
-        setImage((await result).assets[0].uri)
+    if (!result.canceled) {
+      setImage(result.uri);
     }
-}
+  };
+
+  const uploadImage = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('photo', {
+        uri: image,
+        type: 'image/jpeg',
+        name: 'photo.jpg',
+      });
+
+      await axiosInstance.patch(`client/${clientId}/`, formData, {
+        headers: {
+          'Authorization': `Token ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log('Atualização de imagem bem-sucedida');
+      // Navegue para a tela 'Congratulations' após a atualização bem-sucedida
+      navigation.navigate('Welcome');
+    } catch (error) {
+      console.error('Erro ao atualizar a imagem:', error.response.data);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -58,18 +81,13 @@ export default function UserImage() {
           <Text style={{ color: '#fff', fontWeight: '600' }}>Escolher Imagem</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonRegister} 
-          onPress={webcam}>
+        <TouchableOpacity style={styles.buttonRegister} onPress={webcam}>
           <Text style={{ color: '#fff', fontWeight: '600' }}>Tirar a foto</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.buttonText}
-          onPress={() => navigation.navigate('Congratulations')}
-        >
+        <TouchableOpacity style={styles.buttonText} onPress={uploadImage}>
           <Text style={styles.title}>Concluir cadastro</Text>
         </TouchableOpacity>
-
       </Animatable.View>
     </View>
   );

@@ -9,6 +9,9 @@ import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 import axiosInstance from '../../sevices/axiosInstance';
 
+import { setClientId } from '../../reducers/actions';
+import { useDispatch } from 'react-redux';
+
 export default function Register({ route }) {
   const navigation = useNavigation();
 
@@ -19,6 +22,8 @@ export default function Register({ route }) {
 
   const user = route.params?.user || null;
   const { token } = useSelector((state) => state.userReducer);
+
+  const dispatch = useDispatch();
 
   const createClient = async () => {
     try {
@@ -42,6 +47,12 @@ export default function Register({ route }) {
       const newToken = response.data.token;
       if (newToken) {
         user.token = newToken;
+      }
+
+      const newClientId = response.data.id;
+      if (newClientId) {
+        console.log('Novo ID do cliente:', newClientId); // Adicione este console.log
+        dispatch(setClientId(newClientId)); // Despache a ação para atualizar o estado do Redux
       }
 
       navigation.navigate('Address');

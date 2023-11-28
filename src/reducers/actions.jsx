@@ -1,10 +1,10 @@
 export const SET_TOKEN = 'SET_TOKEN'
+export const SET_CLIENT_ID = 'SET_CLIENT_ID';
 export const SET_SIGNED = 'SET_SIGNED'
 export const SET_DATE_OF_BIRTH = 'SET_DATE_OF_BIRTH'
 export const SET_CLIENT_DATA = 'SET_CLIENT_DATA'
 export const SET_ACCOUNT_DATA = 'SET_ACCOUNT_DATA'
 export const SET_TRANSFER_DATA = 'SET_TRANSFER_DATA'
-
 
 
 
@@ -14,6 +14,12 @@ export const setToken = token => dispatch => {
     payload: token
   });
 };
+
+
+export const setClientId = (clientId) => ({
+  type: SET_CLIENT_ID,
+  payload: clientId
+});
 
 
 export const setSigned = signed => dispatch => {
