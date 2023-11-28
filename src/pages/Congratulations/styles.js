@@ -3,17 +3,16 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FF007F',
   },
   containerHeader: {
-    marginTop: '20%',
+    marginTop: '35%',
     marginBottom: '8%',
     paddingStart: '5%',
   },
   message: {
-    fontSize: 28,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: '#FF007F',
   },
   containerForm: {
     backgroundColor: '#FFF',
@@ -24,7 +23,7 @@ const styles = StyleSheet.create({
     paddingEnd: '8%',
   },
   title: {
-    fontSize: 16,
+    fontSize: 20,
     marginTop: 28,
     fontWeight: 'bold',
   },

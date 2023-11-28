@@ -7,6 +7,7 @@ import Register from "../pages/Register";
 import Address from "../pages/Address";
 import UserImage from "../pages/UserImage";
 import Welcome from "../pages/Welcome";
+import Congratulations from "../pages/Congratulations";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +20,7 @@ export default function Routes() {
                 options={{ headerShown: false }}
             />
 
-            <Stack.Screen
+            {/* <Stack.Screen
                 name="ToStart"
                 component={ToStart}
                 options={{ headerShown: false }}
@@ -52,6 +53,12 @@ export default function Routes() {
             <Stack.Screen
                 name="Welcome"
                 component={Welcome}
+                options={{ headerShown: false }}
+            /> */}
+
+            <Stack.Screen
+                name="Congratulations"
+                component={Congratulations}
                 options={{ headerShown: false }}
             />
 

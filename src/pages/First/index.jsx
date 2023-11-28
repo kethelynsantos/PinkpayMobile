@@ -6,7 +6,7 @@ import * as Animatable from 'react-native-animatable';
 export default function First({ navigation }) {
     useEffect(() => {
         setTimeout(() => {
-            navigation.replace('ToStart');
+            navigation.replace('Congratulations');
         }, 3000);
     }, []);
 
