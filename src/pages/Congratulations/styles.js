@@ -7,12 +7,16 @@ const styles = StyleSheet.create({
   containerHeader: {
     marginTop: '35%',
     marginBottom: '8%',
-    paddingStart: '5%',
+    paddingStart: '8%',
+    paddingEnd: '8%',
+    
   },
   message: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#FF007F',
+    display: 'block',
+    textAlign: 'center',
   },
   containerForm: {
     backgroundColor: '#FFF',
@@ -26,6 +30,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 28,
     fontWeight: 'bold',
+    display: 'block',
+    textAlign: 'center',
   },
   input: {
     borderBottomWidth: 1,
