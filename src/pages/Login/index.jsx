@@ -6,7 +6,7 @@ import * as Animatable from 'react-native-animatable';
 
 import { useNavigation } from '@react-navigation/native';
 
-export default function SignIn() {
+export default function Login() {
   const navigation = useNavigation();
   
   return (

@@ -25,7 +25,7 @@ export default function ToStart() {
 
                     <TouchableOpacity 
                         style={styles.buttonRegister}
-                        onPress={ () => navigation.navigate('SignIn')}
+                        onPress={ () => navigation.navigate('Login')}
                     >
                         <Text style={styles.registerText}>Entrar na minha conta</Text>
                     </TouchableOpacity>

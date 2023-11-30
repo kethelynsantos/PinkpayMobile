@@ -55,8 +55,7 @@ export default function UserImage() {
       });
 
       console.log('Atualização de imagem bem-sucedida');
-      // Navegue para a tela 'Congratulations' após a atualização bem-sucedida
-      navigation.navigate('Welcome');
+      navigation.navigate('Congratulations');
     } catch (error) {
       console.error('Erro ao atualizar a imagem:', error.response.data);
     }

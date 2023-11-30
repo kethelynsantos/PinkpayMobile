@@ -2,12 +2,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import First from "../pages/First";
 import ToStart from "../pages/ToStart";
-import SignIn from "../pages/SignIn";
+import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Address from "../pages/Address";
 import UserImage from "../pages/UserImage";
 import Welcome from "../pages/Welcome";
 import Congratulations from "../pages/Congratulations";
+import Home from "../pages/Home";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,8 +28,8 @@ export default function Routes() {
             />
 
             <Stack.Screen
-                name="SignIn"
-                component={SignIn}
+                name="Login"
+                component={Login}
                 options={{ headerShown: false }}
             />
 
@@ -59,6 +60,12 @@ export default function Routes() {
             <Stack.Screen
                 name="Congratulations"
                 component={Congratulations}
+                options={{ headerShown: false }}
+            />
+
+            <Stack.Screen
+                name="Home"
+                component={Home}
                 options={{ headerShown: false }}
             />
 
