@@ -1,26 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import styles from './styles';
 
 import * as Animatable from 'react-native-animatable';
-
 import { useNavigation } from '@react-navigation/native';
+import axiosInstance from '../../sevices/axiosInstance';
+import { useSelector } from 'react-redux';
 
 export default function Home() {
   const navigation = useNavigation();
   const [image, setImage] = useState("https://static.vecteezy.com/system/resources/previews/008/302/463/non_2x/eps10-pink-user-icon-or-logo-in-simple-flat-trendy-modern-style-isolated-on-white-background-free-vector.jpg");
-
+  const [userName, setUserName] = useState('');
+  const { token, clientId } = useSelector((state) => state.userReducer);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+
+  useEffect(() => {
+    // Buscar detalhes do cliente usando o token e o ID do cliente
+    const fetchClientDetails = async () => {
+      try {
+        const response = await axiosInstance.get(`client/${clientId}/`, {
+          headers: {
+            'Authorization': `Token ${token}`,
+          },
+        });
+        setUserName(response.data.name);
+      } catch (error) {
+        console.error('Erro ao obter detalhes do cliente:', error.response.data);
+      }
+    };
+
+    fetchClientDetails();
+  }, [token, clientId]);
 
   return (
     <View style={styles.container}>
       <Animatable.View animation="fadeInLeft" delay={500} style={styles.containerHeader}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: '15%' }}>
-          <Text style={styles.message}>Olá, Kethelyn Gabrielly</Text>
+          <Text style={styles.message}>Olá, {userName}</Text>
           <Image source={{ uri: image }} style={{ width: 52, height: 52, borderRadius: 52, marginLeft: 118 }} />
         </View>
       </Animatable.View>
