@@ -4,7 +4,7 @@ import styles from './styles';
 
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { setToken, setClientId } from '../../reducers/actions';
 import axiosInstance from '../../sevices/axiosInstance';
 
@@ -15,6 +15,10 @@ export default function Login() {
   const [cpf, setCPF] = useState('');
   const [password, setPassword] = useState('');
 
+  const user = route.params?.user || null;
+  const { token } = useSelector((state) => state.userReducer);
+
+
   const loginUser = async () => {
     try {
       const login = await axiosInstance.post(
@@ -23,18 +27,46 @@ export default function Login() {
           cpf: cpf,
           password: password,
         },
+        {
+          headers: {
+            'Authorization': `Token fd478484c6a5192225e424c463b114ffe5143a30`,
+          },
+        }
       );
+
+      dispatch(setToken(login.data.auth_token));
+
+      console.log('login realizado com sucesso:', login.data);
+
+      
+
+      navigation.navigate('Home');
+
+    } catch (error) {
+      console.error('Erro ao fazer login:', error.response.data);
+    }
+  };
+
+  const accessClient = async () => {
+    try {
+      const response = await axiosInstance.post(
+        'client/',
+        {
+          headers: {
+            'Authorization': `Token ${token}`,
+          },
+        }
+      );
+
+      console.log('Cliente acessado com sucesso:', response.data);
 
       const newClientId = response.data.id;
       if (newClientId) {
-        console.log('Novo ID do cliente:', newClientId); // Adicione este console.log
-        dispatch(setClientId(newClientId)); // Despache a ação para atualizar o estado do Redux
+        console.log('ID do cliente:', newClientId);
+        dispatch(setClientId(newClientId));
       }
-      
-      dispatch(setToken(login.data.auth_token));
-      navigation.navigate('Home');
     } catch (error) {
-      console.error('Erro ao fazer login:', error.response.data);
+      console.error('Erro ao acessar cliente:', error.response.data);
     }
   };
 
