@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import styles from './styles';
 
@@ -19,7 +19,7 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <Animatable.View animation="fadeInLeft" delay={500} style={styles.containerHeader}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: '13%' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: '15%' }}>
           <Text style={styles.message}>Olá, Kethelyn Gabrielly</Text>
           <Image source={{ uri: image }} style={{ width: 52, height: 52, borderRadius: 52, marginLeft: 118 }} />
         </View>
@@ -35,9 +35,24 @@ export default function Home() {
 
       <Animatable.View animation="fadeInUp" style={styles.containerForm}>
         <View style={styles.containerSquare}>
-          <View style={styles.square}></View>
-          <View style={styles.square}></View>
-          <View style={styles.square}></View>
+          <View style={styles.square}>
+            <View style={styles.containerImage}>
+              <Image source={require('../../assets/pix.png')} style={{ width: 25, height: 25, marginTop: 20, marginBottom: 10 }} />
+              <Text style={styles.titleSquare}>Área Pix</Text>
+            </View>
+          </View>
+          <View style={styles.square}>
+            <View style={styles.containerImage}>
+              <Image source={require('../../assets/transferencias.png')} style={{ width: 23, height: 23, marginTop: 20, marginBottom: 10 }} />
+              <Text style={styles.titleSquare}>Transferências</Text>
+            </View>
+          </View>
+          <View style={styles.square}>
+            <View style={styles.containerImage}>
+              <Image source={require('../../assets/pagamentos.png')} style={{ width: 26, height: 22, marginTop: 20, marginBottom: 10 }} />
+              <Text style={styles.titleSquare}>Pagamentos</Text>
+            </View>
+          </View>
         </View>
       </Animatable.View>
     </View>

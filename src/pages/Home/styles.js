@@ -6,10 +6,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF007F',
   },
   containerHeader: {
-    marginTop: '5%',
     marginBottom: '18%',
     paddingStart: '5%',
     flexDirection: 'row',
+    alignItems: 'center',
+  },
+  containerImage: {
+    display: 'flex',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   eyeIconContainer: {
@@ -24,14 +28,16 @@ const styles = StyleSheet.create({
   containerForm: {
     backgroundColor: '#FFF',
     flex: 1,
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
     paddingStart: '8%',
     paddingEnd: '8%',
   },
   title: {
     fontSize: 18,
-    color: '#FFF',
+    color: '#fff',
+  },
+  titleSquare: {
+    fontSize: 12,
+    color: '#000',
   },
   containerSquare: {
     flexDirection: 'row', 
@@ -40,10 +46,15 @@ const styles = StyleSheet.create({
   square: {
     width: 98,
     height: 91,
-    backgroundColor: 'blue', 
-    right: 23,
+    backgroundColor: 'white', 
     position: 'relative',
-    bottom: 6,
+    bottom: 40,
+    borderRadius: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 9,
+    elevation: 5,
   },
   input: {
     borderBottomWidth: 1,
