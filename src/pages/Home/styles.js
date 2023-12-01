@@ -9,6 +9,10 @@ const styles = StyleSheet.create({
     marginBottom: '18%',
     paddingStart: '5%',
     flexDirection: 'row',
+  },
+  containerHeaderFunc: {
+    paddingStart: '5%',
+    flexDirection: 'row',
     alignItems: 'center',
   },
   containerImage: {
@@ -25,28 +29,51 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#FFF',
   },
-  containerForm: {
-    backgroundColor: '#FFF',
-    flex: 1,
+  containerSquareMain: {
     paddingStart: '8%',
     paddingEnd: '8%',
+  },
+  containerMain: {
+    backgroundColor: '#FFF',
+    flex: 1,
   },
   title: {
     fontSize: 18,
     color: '#fff',
+  },
+  titleBlack: {
+    fontSize: 18,
+    color: '#000',
+    fontWeight: 'bold',
+    marginLeft: 20,
+    marginTop: 10,
+  },
+  titleGrey: {
+    fontSize: 15,
+    color: '#616167',
+    marginLeft: 30,
+    marginRight: 190,
+    marginTop: 6,
+  },
+  titleGreySecond: {
+    fontSize: 15,
+    color: '#616167',
+    marginLeft: 30,
+    marginRight: 100,
+    marginBottom: 10,
   },
   titleSquare: {
     fontSize: 12,
     color: '#000',
   },
   containerSquare: {
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   square: {
     width: 98,
     height: 91,
-    backgroundColor: 'white', 
+    backgroundColor: 'white',
     position: 'relative',
     bottom: 40,
     borderRadius: 2,
@@ -56,41 +83,39 @@ const styles = StyleSheet.create({
     shadowRadius: 9,
     elevation: 5,
   },
-  input: {
-    borderBottomWidth: 1,
-    height: 40,
-    marginBottom: 12,
-    fontSize: 15,
-  },
-  button: {
-    backgroundColor: '#FF007F',
-    width: '90%',
-    height: 37,
-    borderRadius: 20,
-    marginTop: 33,
-    justifyContent: 'center',
-    alignItems: 'center',
-    left: '5%',
-  },
-  buttonText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  buttonRegister: {
-    marginTop: 14,
-    alignSelf: 'center',
-  },
-  registerText: {
-    color: '#686868',
-    fontSize: 15,
-    textDecorationLine: 'underline'
-  },
 
-  register: {
-    fontSize: 15,
-    color: '#686868',
-    marginTop: 10,
+
+
+  borderedView: {
+    width: '100%',
+  },
+  topBorder: {
+    width: '100%',
+    height: 1,
+    flexShrink: 0,
+    backgroundColor: '#D9D9D9',
+  },
+  borderedContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  emoji: {
+    fontSize: 20,
+  },
+  borderedTitle: {
+    marginLeft: 10,
+    color: '#616167',
+    fontSize: 12,
+  },
+  borderedText: {
+    marginLeft: 10,
+    color: '#616167',
+    fontSize: 12,
+  },
+  borderedAmount: {
+    marginLeft: 5,
+    color: '#616167',
+    fontSize: 12,
   },
 });
 
