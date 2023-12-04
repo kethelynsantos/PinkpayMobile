@@ -9,6 +9,7 @@ import UserImage from "../pages/UserImage";
 import Welcome from "../pages/Welcome";
 import Congratulations from "../pages/Congratulations";
 import Home from "../pages/Home";
+import Pix from "../pages/Pix";
 
 const Stack = createNativeStackNavigator();
 
@@ -66,6 +67,12 @@ export default function Routes() {
             <Stack.Screen
                 name="Home"
                 component={Home}
+                options={{ headerShown: false }}
+            />
+
+            <Stack.Screen
+                name="Pix"
+                component={Pix}
                 options={{ headerShown: false }}
             />
 

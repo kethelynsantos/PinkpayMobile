@@ -7,7 +7,7 @@ import * as Animatable from 'react-native-animatable';
 import axiosInstance from '../../sevices/axiosInstance';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { setClientId, setClientName } from '../../reducers/actions';
+import { setClientId, setClientName, setAccountBalance } from '../../reducers/actions';
 
 export default function Home() {
   const navigation = useNavigation();
@@ -17,6 +17,10 @@ export default function Home() {
   const { token, clientId } = useSelector((state) => state.userReducer);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [accountBalance, setAccountBalance] = useState(0);
+  const [accountDetails, setAccountDetails] = useState({
+    agency: '',
+    number: '',
+  });
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -86,6 +90,40 @@ export default function Home() {
   }, [token]);
 
 
+  useEffect(() => {
+    const fetchAccountDetails = async () => {
+      try {
+        const response = await axiosInstance.get('account/', {
+          headers: {
+            'Authorization': `Token ${token}`,
+          },
+        });
+
+        const clientAccount = response.data.find(account => account.client === clientId);
+
+        if (clientAccount) {
+          const { agency, number } = clientAccount;
+
+          if (agency !== undefined && number !== undefined) {
+            setAccountDetails({
+              agency,
+              number,
+            });
+          } else {
+            console.error('Agência ou número da conta é undefined.');
+          }
+        } else {
+          console.error('Conta não encontrada para o cliente ID:', clientId);
+        }
+      } catch (error) {
+        console.error('Erro ao obter detalhes da conta:', error.response.data);
+      }
+    };
+
+    fetchAccountDetails();
+  }, [token, clientId]);
+
+
   return (
     <View style={styles.container}>
       <Animatable.View animation="fadeInLeft" delay={500} style={styles.containerHeaderTop}>
@@ -95,8 +133,8 @@ export default function Home() {
         </View>
       </Animatable.View>
 
-      <View style={{ left: 20, marginBottom: 20}}>
-        <Text style={styles.title}>Agência: 2582 | Conta 223443</Text>
+      <View style={{ left: 20, marginBottom: 20 }}>
+        <Text style={styles.title}>{`Agência: ${accountDetails.agency} | Conta ${accountDetails.number}`}</Text>
       </View>
 
       <View style={styles.containerHeader}>
@@ -114,12 +152,12 @@ export default function Home() {
       <Animatable.View animation="fadeInUp" style={styles.containerMain}>
         <View style={styles.containerSquareMain}>
           <View style={styles.containerSquare}>
-            <View style={styles.square}>
+            <TouchableOpacity onPress={ () => navigation.navigate('Pix')} style={styles.square}>
               <View style={styles.containerImage}>
                 <Image source={require('../../assets/pix.png')} style={{ width: 25, height: 25, marginTop: 20, marginBottom: 10 }} />
                 <Text style={styles.titleSquare}>Área Pix</Text>
               </View>
-            </View>
+            </TouchableOpacity>
             <View style={styles.square}>
               <View style={styles.containerImage}>
                 <Image source={require('../../assets/transferencias.png')} style={{ width: 23, height: 23, marginTop: 20, marginBottom: 10 }} />
@@ -178,7 +216,7 @@ export default function Home() {
             <Text style={{ fontSize: 18, color: '#000', fontWeight: 'bold', marginLeft: 30, marginTop: 10, }}>R$ 455,90</Text>
           </View>
         </View>
-      </Animatable.View>
-    </View>
+      </Animatable.View >
+    </View >
   );
 }

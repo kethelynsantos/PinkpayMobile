@@ -2,7 +2,8 @@ import {
     SET_TOKEN,
     SET_CLIENT_ID,
     SET_CLIENT_NAME,
-    SET_CLIENT_PHOTO
+    SET_CLIENT_PHOTO,
+    SET_ACCOUNT_BALANCE,
 } from "./actions";
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
     clientId: null,
     clientName: '',
     clientPhoto: '',
+    accountBalance: 0,
 };
 
 function userReducer(state = initialState, action) {
@@ -23,6 +25,8 @@ function userReducer(state = initialState, action) {
             return { ...state, clientName: action.payload };
         case SET_CLIENT_PHOTO:
             return { ...state, clientPhoto: action.payload };
+        case SET_ACCOUNT_BALANCE:
+            return {...state, accountBalance: action.payload };
         default:
             return state;
     }

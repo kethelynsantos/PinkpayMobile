@@ -2,6 +2,7 @@ export const SET_TOKEN = 'SET_TOKEN'
 export const SET_CLIENT_ID = 'SET_CLIENT_ID';
 export const SET_CLIENT_NAME = 'SET_CLIENT_NAME';
 export const SET_CLIENT_PHOTO = 'SET_CLIENT_PHOTO';
+export const SET_ACCOUNT_BALANCE = 'SET_ACCOUNT_BALANCE';
 
 
 
@@ -28,4 +29,10 @@ export const setClientName = (clientName) => ({
 export const setClientPhoto = (clientPhoto) => ({
   type: SET_CLIENT_PHOTO,
   payload: clientPhoto
+});
+
+
+export const setAccountBalance = (balance) => ({
+  type: 'SET_ACCOUNT_BALANCE',
+  payload: balance,
 });
