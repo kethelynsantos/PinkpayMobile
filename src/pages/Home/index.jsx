@@ -16,7 +16,6 @@ export default function Home() {
   const [userName, setUserName] = useState('');
   const { token, clientId } = useSelector((state) => state.userReducer);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
   const [accountBalance, setAccountBalance] = useState(0);
 
   const togglePasswordVisibility = () => {
@@ -34,6 +33,7 @@ export default function Home() {
 
         const newClientId = response.data.id;
         const clientName = response.data.name;
+        const clientImage = response.data.photo;
 
         if (newClientId) {
           console.log('ID do cliente:', newClientId);
@@ -47,6 +47,13 @@ export default function Home() {
           setUserName(clientName);
         }
 
+        if (clientImage) {
+          console.log('Imagem do cliente encontrada:', clientImage);
+          setImage(clientImage);
+        } else {
+          console.log('Imagem do cliente não encontrada. Usando imagem padrão.');
+          setImage("https://static.vecteezy.com/system/resources/previews/008/302/463/non_2x/eps10-pink-user-icon-or-logo-in-simple-flat-trendy-modern-style-isolated-on-white-background-free-vector.jpg");
+        }
       } catch (error) {
         console.error('Erro ao acessar cliente:', error.response.data);
       }
@@ -70,7 +77,6 @@ export default function Home() {
           console.log('Saldo da conta:', balance);
           setAccountBalance(balance);
         }
-
       } catch (error) {
         console.error('Erro ao obter saldo da conta:', error.response.data);
       }
@@ -82,12 +88,16 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      <Animatable.View animation="fadeInLeft" delay={500} style={styles.containerHeader}>
+      <Animatable.View animation="fadeInLeft" delay={500} style={styles.containerHeaderTop}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: '15%' }}>
           <Text style={styles.message}>Olá, {userName}</Text>
           <Image source={{ uri: image }} style={{ width: 52, height: 52, borderRadius: 52, marginLeft: 118 }} />
         </View>
       </Animatable.View>
+
+      <View style={{ left: 20, marginBottom: 20}}>
+        <Text style={styles.title}>Agência: 2582 | Conta 223443</Text>
+      </View>
 
       <View style={styles.containerHeader}>
         {isPasswordVisible ? (

@@ -51,8 +51,8 @@ export default function Register({ route }) {
 
       const newClientId = response.data.id;
       if (newClientId) {
-        console.log('Novo ID do cliente:', newClientId); // Adicione este console.log
-        dispatch(setClientId(newClientId)); // Despache a ação para atualizar o estado do Redux
+        console.log('Novo ID do cliente:', newClientId); 
+        dispatch(setClientId(newClientId));
       }
 
       navigation.navigate('Address');

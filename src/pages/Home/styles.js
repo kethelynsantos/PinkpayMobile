@@ -10,6 +10,11 @@ const styles = StyleSheet.create({
     paddingStart: '5%',
     flexDirection: 'row',
   },
+  containerHeaderTop: {
+    marginBottom: '5%',
+    paddingStart: '5%',
+    flexDirection: 'row',
+  },
   containerHeaderFunc: {
     paddingStart: '5%',
     flexDirection: 'row',
