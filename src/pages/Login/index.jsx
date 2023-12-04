@@ -5,7 +5,7 @@ import styles from './styles';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { setToken, setClientId } from '../../reducers/actions';
+import { setToken } from '../../reducers/actions';
 import axiosInstance from '../../sevices/axiosInstance';
 
 export default function Login() {
@@ -15,9 +15,7 @@ export default function Login() {
   const [cpf, setCPF] = useState('');
   const [password, setPassword] = useState('');
 
-  const user = route.params?.user || null;
   const { token } = useSelector((state) => state.userReducer);
-
 
   const loginUser = async () => {
     try {
@@ -34,39 +32,17 @@ export default function Login() {
         }
       );
 
-      dispatch(setToken(login.data.auth_token));
+      const { auth_token } = login.data;
+      dispatch(setToken(auth_token));
 
       console.log('login realizado com sucesso:', login.data);
 
-      
+      console.log('Token no Redux:', auth_token);
 
       navigation.navigate('Home');
 
     } catch (error) {
       console.error('Erro ao fazer login:', error.response.data);
-    }
-  };
-
-  const accessClient = async () => {
-    try {
-      const response = await axiosInstance.post(
-        'client/',
-        {
-          headers: {
-            'Authorization': `Token ${token}`,
-          },
-        }
-      );
-
-      console.log('Cliente acessado com sucesso:', response.data);
-
-      const newClientId = response.data.id;
-      if (newClientId) {
-        console.log('ID do cliente:', newClientId);
-        dispatch(setClientId(newClientId));
-      }
-    } catch (error) {
-      console.error('Erro ao acessar cliente:', error.response.data);
     }
   };
 

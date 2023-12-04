@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
 
   logo: {
       color: '#F9004D',
-      fontSize: 20,
+      fontSize: 27,
       fontWeight: 'bold',
       display: 'flex',
       alignItems: 'center',
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
       position: 'absolute',
       width: 114,
       height: 35,
-      left: 0,
+      left: 15,
       top: 14,
   },
 

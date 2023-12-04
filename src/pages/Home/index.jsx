@@ -4,38 +4,81 @@ import { Feather } from '@expo/vector-icons';
 import styles from './styles';
 
 import * as Animatable from 'react-native-animatable';
-import { useNavigation } from '@react-navigation/native';
 import axiosInstance from '../../sevices/axiosInstance';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { setClientId, setClientName } from '../../reducers/actions';
 
 export default function Home() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [image, setImage] = useState("https://static.vecteezy.com/system/resources/previews/008/302/463/non_2x/eps10-pink-user-icon-or-logo-in-simple-flat-trendy-modern-style-isolated-on-white-background-free-vector.jpg");
   const [userName, setUserName] = useState('');
   const { token, clientId } = useSelector((state) => state.userReducer);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const [accountBalance, setAccountBalance] = useState(0);
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
   useEffect(() => {
-    // Buscar detalhes do cliente usando o token e o ID do cliente
-    const fetchClientDetails = async () => {
+    const accessClient = async () => {
       try {
-        const response = await axiosInstance.get(`client/${clientId}/`, {
+        const response = await axiosInstance.get('current-client/', {
           headers: {
             'Authorization': `Token ${token}`,
           },
         });
-        setUserName(response.data.name);
+
+        const newClientId = response.data.id;
+        const clientName = response.data.name;
+
+        if (newClientId) {
+          console.log('ID do cliente:', newClientId);
+          dispatch(setClientId(newClientId));
+        }
+
+        if (clientName) {
+          console.log('Nome do cliente:', clientName);
+          dispatch(setClientName(clientName));
+
+          setUserName(clientName);
+        }
+
       } catch (error) {
-        console.error('Erro ao obter detalhes do cliente:', error.response.data);
+        console.error('Erro ao acessar cliente:', error.response.data);
       }
     };
 
-    fetchClientDetails();
-  }, [token, clientId]);
+    accessClient();
+  }, [token, clientId, dispatch]);
+
+  useEffect(() => {
+    const fetchAccountBalance = async () => {
+      try {
+        const response = await axiosInstance.get('balance/', {
+          headers: {
+            'Authorization': `Token ${token}`,
+          },
+        });
+
+        const balance = response.data.current_balance;
+
+        if (balance !== undefined) {
+          console.log('Saldo da conta:', balance);
+          setAccountBalance(balance);
+        }
+
+      } catch (error) {
+        console.error('Erro ao obter saldo da conta:', error.response.data);
+      }
+    };
+
+    fetchAccountBalance();
+  }, [token]);
+
 
   return (
     <View style={styles.container}>
@@ -47,7 +90,11 @@ export default function Home() {
       </Animatable.View>
 
       <View style={styles.containerHeader}>
-        <Text style={styles.message}>R$ 1000.00</Text>
+        {isPasswordVisible ? (
+          <Text style={styles.message}>R$ {accountBalance}</Text>
+        ) : (
+          <Text style={styles.message}>Saldo oculto</Text>
+        )}
         <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIconContainer}>
           <Feather name={isPasswordVisible ? 'eye' : 'eye-off'} size={20} color="white" />
         </TouchableOpacity>
