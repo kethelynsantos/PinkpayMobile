@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import styles from './styles';
 
 import * as Animatable from 'react-native-animatable';
@@ -25,11 +25,11 @@ export default function Login() {
           cpf: cpf,
           password: password,
         },
-        {
+        /* {
           headers: {
             'Authorization': `Token fd478484c6a5192225e424c463b114ffe5143a30`,
           },
-        }
+        } */
       );
 
       const { auth_token } = login.data;
@@ -42,7 +42,9 @@ export default function Login() {
       navigation.navigate('Home');
 
     } catch (error) {
-      console.error('Erro ao fazer login:', error.response.data);
+      const data = error.response.data.non_field_errors
+      console.log(error.response.data)
+      Alert.alert(`${data ? data : error.response.data.detail}`);
     }
   };
 
