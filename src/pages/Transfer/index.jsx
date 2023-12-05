@@ -5,11 +5,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector, useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 
-import styles from './styles';
+import styles from './styles.js';
 
-import axiosInstance from '../../sevices/axiosInstance';
+import axiosInstance from '../../sevices/axiosInstance.jsx';
 
-export default function Pix({ navigation }) {
+export default function Transfer({ navigation }) {
   const [moneyValue, setMoneyValue] = useState('');
   const [keyValue, setKeyValue] = useState('');
   const [isValueScreen, setIsValueScreen] = useState(true);
@@ -38,7 +38,7 @@ export default function Pix({ navigation }) {
           {
             transfer_amount: numericValue,
             recipient_cpf: keyValue,
-            transfer_type: 'pix',
+            transfer_type: 'Transfer',
           },
           {
             headers: {
@@ -97,7 +97,7 @@ export default function Pix({ navigation }) {
           onChangeText={(text) => setKeyValue(text)}
         />
         <TouchableOpacity style={styles.button} onPress={validValueTransfer}>
-          <Ionicons name='arrow-forward-outline' size={30} />
+          <Ionicons name='arrow-forward-outline' size={30} color={'white'}/>
         </TouchableOpacity>
       </SafeAreaView>
     )

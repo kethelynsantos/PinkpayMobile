@@ -127,6 +127,59 @@ export default function Home() {
   }, [token, clientId]);
 
 
+  const requestCreditCard = async () => {
+    try {
+      const response = await axiosInstance.post('client/request_credit_card/', null, {
+        headers: {
+          'Authorization': `Token ${token}`,
+        },
+      });
+  
+      const { status, message } = response.data;
+  
+      // Mostrar alerta com a resposta da API
+      alert(`Status: ${status}\nMessage: ${status === 'error' ? message : ''}`);
+  
+      if (status === 'success') {
+        // Atualizar o estado com os detalhes do cartão
+        setAccountDetails({
+          ...accountDetails,
+          credit_card_limit: response.data.credit_limit,
+        });
+      }
+    } catch (error) {
+      // Mostrar alerta com a mensagem de erro da API
+      alert(`Aviso: ${error.response.data.error}`);
+    }
+  };
+
+  const getCreditCardDetails = async () => {
+    try {
+      const response = await axiosInstance.get('current_user_credit_card/', {
+        headers: {
+          'Authorization': `Token ${token}`,
+        },
+      });
+
+      // Verificar se o cliente possui um cartão de crédito
+      if (response.data && response.data.credit_limit) {
+        // Atualizar o estado com os detalhes do cartão
+        setAccountDetails({
+          ...accountDetails,
+          credit_card_limit: response.data.credit_limit,
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao obter detalhes do cartão de crédito:', error.response.data);
+    }
+  };
+
+  useEffect(() => {
+    // Chamar a função para obter os detalhes do cartão de crédito
+    getCreditCardDetails();
+  }, [token]);
+
+
   return (
     <View style={styles.container}>
       <Animatable.View animation="fadeInLeft" delay={500} style={styles.containerHeaderTop}>
@@ -149,30 +202,32 @@ export default function Home() {
         <TouchableOpacity onPress={toggleBalanceVisibility} style={styles.eyeIconContainer}>
           <Feather name={isPasswordVisible ? 'eye' : 'eye-off'} size={20} color="white" />
         </TouchableOpacity>
-        <Text style={styles.title}>Ver extrato</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Statement')} >
+          <Text style={styles.title}>Ver extrato</Text>
+        </TouchableOpacity>
       </View>
 
       <Animatable.View animation="fadeInUp" style={styles.containerMain}>
         <View style={styles.containerSquareMain}>
           <View style={styles.containerSquare}>
-            <TouchableOpacity onPress={() => navigation.navigate('Pix')} style={styles.square}>
+            <TouchableOpacity onPress={() => navigation.navigate('Transfer')} style={styles.square}>
               <View style={styles.containerImage}>
                 <Image source={require('../../assets/pix.png')} style={{ width: 25, height: 25, marginTop: 20, marginBottom: 10 }} />
                 <Text style={styles.titleSquare}>Área Pix</Text>
               </View>
             </TouchableOpacity>
-            <View style={styles.square}>
+            <TouchableOpacity onPress={() => navigation.navigate('Transfer')} style={styles.square}>
               <View style={styles.containerImage}>
-                <Image source={require('../../assets/transferencias.png')} style={{ width: 23, height: 23, marginTop: 20, marginBottom: 10 }} />
+                <Image source={require('../../assets/transferencias.png')} style={{ width: 25, height: 25, marginTop: 20, marginBottom: 10 }} />
                 <Text style={styles.titleSquare}>Transferências</Text>
               </View>
-            </View>
-            <View style={styles.square}>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Transfer')} style={styles.square}>
               <View style={styles.containerImage}>
-                <Image source={require('../../assets/pagamentos.png')} style={{ width: 26, height: 22, marginTop: 20, marginBottom: 10 }} />
+                <Image source={require('../../assets/pagamentos.png')} style={{ width: 25, height: 25, marginTop: 20, marginBottom: 10 }} />
                 <Text style={styles.titleSquare}>Pagamentos</Text>
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -208,15 +263,26 @@ export default function Home() {
             <Text style={styles.titleGreySecond}>Decubra tudo que esse mundo pink pode te oferecer</Text>
           </View>
 
-          <View >
+          <View>
             <View style={styles.topBorder}></View>
-            <View style={styles.containerHeaderFunc}>
-              <Text style={{ fontSize: 18, color: '#000', fontWeight: 'bold', marginLeft: 8, marginTop: 32, }}>Cartão de crédito</Text>
-              <Image source={require('../../assets/seta.png')} style={{ width: 9, height: 16, marginTop: 32, marginBottom: 10, marginLeft: 208 }} />
+            <TouchableOpacity onPress={requestCreditCard}>
+              <View style={styles.containerHeaderFunc}>
+                <Text style={{ fontSize: 18, color: '#000', fontWeight: 'bold', marginLeft: 8, marginTop: 32, }}>Cartão de crédito</Text>
+                <Image source={require('../../assets/seta.png')} style={{ width: 9, height: 16, marginTop: 32, marginBottom: 10, marginLeft: 208 }} />
+              </View>
+            </TouchableOpacity>
 
-            </View>
-            <Text style={styles.titleGrey}>Fatura atual</Text>
-            <Text style={{ fontSize: 18, color: '#000', fontWeight: 'bold', marginLeft: 30, marginTop: 10, }}>R$ 455,90</Text>
+            <Text style={styles.titleGrey}>Limite disponível</Text>
+            {/* Verificar se existe o limite de crédito no estado */}
+            {accountDetails.credit_card_limit !== undefined ? (
+              <Text style={{ fontSize: 18, color: '#000', fontWeight: 'bold', marginLeft: 30, marginTop: 10 }}>
+                R$ {accountDetails.credit_card_limit}
+              </Text>
+            ) : (
+              <Text style={{ fontSize: 18, color: '#000', fontWeight: 'bold', marginLeft: 30, marginTop: 10 }}>
+                Você ainda não possui um cartão
+              </Text>
+            )}
           </View>
         </View>
       </Animatable.View >
