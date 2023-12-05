@@ -208,7 +208,7 @@ export default function Home() {
       <Animatable.View animation="fadeInLeft" delay={500} style={styles.containerHeaderTop}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: '15%' }}>
           <Text style={styles.message}>Olá, {userName}</Text>
-          <Image source={{ uri: image }} style={{ width: 52, height: 52, borderRadius: 52, marginLeft: '59%' }} />
+          <Image source={{ uri: image }} style={{ width: 52, height: 52, borderRadius: 52, marginLeft: '55%' }} />
         </View>
       </Animatable.View>
 
