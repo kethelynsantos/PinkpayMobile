@@ -129,29 +129,35 @@ export default function Home() {
 
   const requestCreditCard = async () => {
     try {
-      const response = await axiosInstance.post('client/request_credit_card/', null, {
-        headers: {
-          'Authorization': `Token ${token}`,
-        },
-      });
+      // Mostrar um alerta de confirmação
+      const userResponse = window.confirm('Deseja solicitar um cartão de crédito?');
   
-      const { status, message } = response.data;
-  
-      // Mostrar alerta com a resposta da API
-      alert(`Status: ${status}\nMessage: ${status === 'error' ? message : ''}`);
-  
-      if (status === 'success') {
-        // Atualizar o estado com os detalhes do cartão
-        setAccountDetails({
-          ...accountDetails,
-          credit_card_limit: response.data.credit_limit,
+      if (userResponse) {
+        const response = await axiosInstance.post('client/request_credit_card/', null, {
+          headers: {
+            'Authorization': `Token ${token}`,
+          },
         });
+  
+        const { status, message } = response.data;
+  
+        // Mostrar alerta com a resposta da API
+        alert(`Status: ${status}\nMessage: ${status === 'error' ? message : ''}`);
+  
+        if (status === 'success') {
+          // Se a resposta for positiva, atualizar o texto e mostrar o limite disponível
+          setAccountDetails((prevDetails) => ({
+            ...prevDetails,
+            credit_card_limit: response.data.credit_card_limit,
+          }));
+        }
       }
     } catch (error) {
       // Mostrar alerta com a mensagem de erro da API
       alert(`Aviso: ${error.response.data.error}`);
     }
   };
+
 
   const getCreditCardDetails = async () => {
     try {
