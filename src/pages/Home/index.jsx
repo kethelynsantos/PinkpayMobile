@@ -16,13 +16,20 @@ export default function Home() {
   const [userName, setUserName] = useState('');
   const { token, clientId } = useSelector((state) => state.userReducer);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [accountBalance, setAccountBalance] = useState(0);
+  const [accountBalance, setBalance] = useState(0);
   const [accountDetails, setAccountDetails] = useState({
     agency: '',
     number: '',
   });
 
-  const togglePasswordVisibility = () => {
+  const [isBalanceLoaded, setIsBalanceLoaded] = useState(false);
+
+  const toggleBalanceVisibility = async () => {
+
+    await showBalance();
+    setIsBalanceLoaded(true);
+
+
     setIsPasswordVisible(!isPasswordVisible);
   };
 
@@ -66,29 +73,25 @@ export default function Home() {
     accessClient();
   }, [token, clientId, dispatch]);
 
-  useEffect(() => {
-    const fetchAccountBalance = async () => {
-      try {
-        const response = await axiosInstance.get('balance/', {
-          headers: {
-            'Authorization': `Token ${token}`,
-          },
-        });
+  const showBalance = async () => {
+    try {
+      const response = await axiosInstance.get('balance/', {
+        headers: {
+          'Authorization': `Token ${token}`,
+        },
+      });
 
-        const balance = response.data.current_balance;
+      const balance = response.data.current_balance;
 
-        if (balance !== undefined) {
-          console.log('Saldo da conta:', balance);
-          setAccountBalance(balance);
-        }
-      } catch (error) {
-        console.error('Erro ao obter saldo da conta:', error.response.data);
+      if (balance !== undefined) {
+        console.log('Saldo da conta:', balance);
+        setBalance(balance);
+        dispatch(setAccountBalance(response.data.current_balance));
       }
-    };
-
-    fetchAccountBalance();
-  }, [token]);
-
+    } catch (error) {
+      console.error('Erro ao obter saldo da conta:', error.response.data);
+    }
+  };
 
   useEffect(() => {
     const fetchAccountDetails = async () => {
@@ -113,7 +116,7 @@ export default function Home() {
             console.error('Agência ou número da conta é undefined.');
           }
         } else {
-          console.error('Conta não encontrada para o cliente ID:', clientId);
+          console.log('Conta não encontrada para o cliente ID:', clientId);
         }
       } catch (error) {
         console.error('Erro ao obter detalhes da conta:', error.response.data);
@@ -143,7 +146,7 @@ export default function Home() {
         ) : (
           <Text style={styles.message}>Saldo oculto</Text>
         )}
-        <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIconContainer}>
+        <TouchableOpacity onPress={toggleBalanceVisibility} style={styles.eyeIconContainer}>
           <Feather name={isPasswordVisible ? 'eye' : 'eye-off'} size={20} color="white" />
         </TouchableOpacity>
         <Text style={styles.title}>Ver extrato</Text>
@@ -152,7 +155,7 @@ export default function Home() {
       <Animatable.View animation="fadeInUp" style={styles.containerMain}>
         <View style={styles.containerSquareMain}>
           <View style={styles.containerSquare}>
-            <TouchableOpacity onPress={ () => navigation.navigate('Pix')} style={styles.square}>
+            <TouchableOpacity onPress={() => navigation.navigate('Pix')} style={styles.square}>
               <View style={styles.containerImage}>
                 <Image source={require('../../assets/pix.png')} style={{ width: 25, height: 25, marginTop: 20, marginBottom: 10 }} />
                 <Text style={styles.titleSquare}>Área Pix</Text>

@@ -4,35 +4,31 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector, useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
+
 import styles from './styles';
 
 import axiosInstance from '../../sevices/axiosInstance';
-
 
 export default function Pix({ navigation }) {
   const [moneyValue, setMoneyValue] = useState('');
   const [keyValue, setKeyValue] = useState('');
   const [isValueScreen, setIsValueScreen] = useState(true);
-  const [isCNPJ, setIsCNPJ] = useState(false);
-  const [valid, setValid] = useState(false);
-
-  const dispatch = useDispatch();
   const { accountBalance, token } = useSelector((state) => state.userReducer);
 
   const validValueTransfer = async () => {
     const numericValue = extractNumericNumber(moneyValue);
-
+  
     if (numericValue === 0) {
       Alert.alert('', 'O valor não pode ser igual a 0', [
         {
           text: 'OK',
           style: 'destructive',
-          onPress: () => { },
+          onPress: () => {},
         },
       ]);
       return;
     }
-
+  
     if (isValueScreen) {
       setIsValueScreen(false);
     } else {
@@ -41,7 +37,7 @@ export default function Pix({ navigation }) {
           'transfer/',
           {
             transfer_amount: numericValue,
-            recipient_cpf: removeSpecialCharacters(keyValue),
+            recipient_cpf: keyValue,
             transfer_type: 'pix',
           },
           {
@@ -50,22 +46,14 @@ export default function Pix({ navigation }) {
             },
           }
         );
-
-        // Manipular a resposta conforme necessário
+  
+        // Manipular a resposta da transferência
         console.log('Resposta da transferência:', response.data);
-
-        // Você pode adicionar mais lógica aqui, como mostrar uma mensagem de sucesso
-        Alert.alert('Transferência realizada com sucesso!', '', [
-          {
-            text: 'OK',
-            onPress: () => {
-              // Navegar para outra tela ou realizar ações adicionais se necessário
-              navigation.navigate('Home');
-            },
-          },
-        ]);
+  
+        navigation.navigate('Home');
+  
       } catch (error) {
-        console.error('Erro ao realizar transferência:', error.response.data);
+        console.error('Erro ao realizar transferência:', error.response?.data || error.message);
         // Tratar o erro conforme necessário
         Alert.alert('Erro ao realizar transferência. Tente novamente.');
       }
@@ -76,18 +64,6 @@ export default function Pix({ navigation }) {
     const valueWithoutSymbol = str.replace(/[^\d,]/g, '');
     const numericValue = parseFloat(valueWithoutSymbol.replace(',', ''));
     return numericValue;
-  }
-
-  function setValueCpfCnpj(text) {
-    setIsCNPJ(text.length > 13);
-    setKeyValue(text);
-
-    const isValidLength = text.length === 14 || text.length === 18;
-    setValid(isValidLength);
-  }
-
-  function removeSpecialCharacters(input) {
-    return input.replace(/[^0-9]/g, '');
   }
 
   return (
@@ -118,7 +94,7 @@ export default function Pix({ navigation }) {
           style={styles.input}
           keyboardType="numeric"
           value={keyValue}
-          onChangeText={(text) => setValueCpfCnpj(text)}
+          onChangeText={(text) => setKeyValue(text)}
         />
         <TouchableOpacity style={styles.button} onPress={validValueTransfer}>
           <Ionicons name='arrow-forward-outline' size={30} />
